@@ -1,0 +1,257 @@
+% 
+% 
+% Climate modeling in general:
+% 
+% *Very Basic introduction climate models:
+% www.uni-graz.at › ~propst › climate
+% 
+% *Excellent short course numerical climate models:
+% http://www.climate.unibe.ch/~stocker/papers/stocker14icm.pdf
+% 
+%  
+% 
+% *Embedding in overall climate research (the IPCC reports, WG1 is relevant in particular, but you cant read it all, see it as background material and to find references):
+% 
+% https://www.ipcc.ch/report/ar5/wg1/
+% 
+%  
+% 
+% EC-Earth:
+% 
+% EC-Earth  (the model you will work with, one of the ~30 state of the art models used world wide, based on the weather forecast model of ECMWF), consists of an atmosphere, ocean, sea ice and land surface model; all coupled interactively
+% 
+% 
+% *Detailed descriotion of the atmosphere and land surface model (called ifs and HTESSEL respectively):
+% https://software.ecmwf.int › wiki › display
+% (note that data assimilation is not used in EC-Earth)
+% 
+% 
+% *Detailed description ocean model used in EC-Earth:
+% http://www.nemo-ocean.eu/
+% 
+% *The EC-Earth model, 2 descriptions:
+% 
+% http://journals.ametsoc.org/doi/abs/10.1175/2010BAMS2877.1
+% 
+% http://link.springer.com/article/10.1007%2Fs00382-011-1228-5
+% 
+% 
+% Ec-earth portal:
+% http://www.ec-earth.org/
+% 
+% The EC-Earth development portal:
+% https://dev.ec-earth.org/
+% 
+% European earth system modelling initiative:
+% https://verc.enes.org/
+% 
+% Performance EC-Earth in vergelijking met de ander modellen is kun je vinden op https://files.lsce.ipsl.fr/public.php?service=files&t=13b22be5f29ef6c79889e59d95e9e453
+
+
+@article{Stocker2011,
+  author          = {Stocker, Thomas},
+  title           = {{Introduction to Climate Modelling}},
+  journal         = {Climate System Modeling},
+  pages           = {189},
+  year            = {2011},
+  isbn            = {978-3-642-00772-9},
+  issn            = {1866-8348},
+  doi             = {10.1007/978-3-642-00773-6},
+  url             = {http://link.springer.com/10.1007/978-3-642-00773-6},
+}
+
+
+@misc{dev-guide,
+  title = {EC-Earth 3 Development Guide},
+  howpublished = {\url{https://dev.ec-earth.org/projects/ecearth3/repository/changes/ecearth3/trunk/doc/development-guide.pdf}},
+}
+
+
+@article{KT2003,
+  author = {Karl, T. R. and K. E. Trenberth},
+  title = {Modern global climate change},
+  journal = {Science}, 
+  number = {302},
+  pages = {1719--1723},
+  doi = {10.1126/science.1090228},
+  year = {2003},
+}
+
+@article{Hazeleger2010,
+  author          = {Hazeleger, Wilco and Severijns, Camiel and Semmler, Tido and Ştefănescu, Simona and Yang, Shuting and Wang, Xueli and Wyser, Klaus and Dutra, Emanuel and Baldasano, Jos{\'{e}} M. and Bintanja, Richard and Bougeault, Philippe and Caballero, Rodrigo and Ekman, Annica M. L. and Christensen, Jens H. and van den Hurk, Bart and Jimenez, Pedro and Jones, Colin and K{\aa}llberg, Per and Koenigk, Torben and McGrath, Ray and Miranda, Pedro and {Van Noije}, Twan and Palmer, Tim and Parodi, Jos{\'{e}} A. and Schmith, Torben and Selten, Frank and Storelvmo, Trude and Sterl, Andreas and Tapamo, Honor{\'{e}} and Vancoppenolle, Martin and Viterbo, Pedro and Will{\'{e}}n, Ulrika},
+  title           = {{EC-Earth: A Seamless Earth-System Prediction Approach in Action}},
+  journal         = {Bulletin of the American Meteorological Society},
+  volume          = {91},
+  number          = {10},
+  pages           = {1357--1363},
+  year            = {2010},
+  issn            = {0003-0007},
+  doi             = {10.1175/2010BAMS2877.1},
+  url             = {http://journals.ametsoc.org/doi/abs/10.1175/2010BAMS2877.1},
+}
+
+@article{Hazeleger2012,
+  author          = {Hazeleger, W. and Wang, X. and Severijns, C. and \c{S}tef\u{a}nescu, S. and Bintanja, R. and Sterl, A. and Wyser, K. and Semmler, T. and Yang, S. and van den Hurk, B. and van Noije, T. and van der Linden, E. and van der Wiel, K.},
+  title           = {{EC-Earth V2.2: description and validation of a new seamless earth system prediction model}},
+  journal         = {Climate Dynamics},
+  volume          = {39},
+  number          = {11},
+  pages           = {2611--2629},
+  year            = {2012},
+  issn            = {0930-7575},
+  doi             = {10.1007/s00382-011-1228-5},
+  url             = {http://link.springer.com/10.1007/s00382-011-1228-5},
+}
+
+@article{Alexander2011,
+  author          = {Alexander, Ka and Easterbrook, Sm},
+  title           = {{The Software Architecture of Global Climate Models}},
+  journal         = {AGU Fall Meeting Abstracts},
+  pages           = {1394},
+  year            = {2011},
+  url             = {http://adsabs.harvard.edu/abs/2011AGUFMIN41A1394A},
+}
+
+@mastersthesis{oriol14,
+  author = {Oriol Tint\'{o} Prims},
+  school = {Universitat Aut\`{o}noma de Barcelona},
+title = {{Accelerating NEMO: Towards Exascale Climate Simulation}},
+year = {2014}
+}
+
+@booklet{1399454274743,
+  author    = {Mozdzynski, G and Morcrette, J.-J.},
+  title     = {{Reorganization of the radiation transfer calculations in the ECMWF IFS}},
+  booktitle = {Technical Memorandum},
+  number    = {721},
+  pages     = {20},
+  publisher = {ECMWF},
+  month     = {apr},
+  year      = {2014},
+  type      = {Technical Memorandum},
+}
+
+@misc{br-wiki,
+  title = {Guide for Building and Running from the development portal},
+  howpublished = {\url{https://dev.ec-earth.org/projects/ecearth3/wiki/Short\_guides\_for\_Building\_and\_Running\_EC-Earth\_3\_on\_various\_machines}},
+}
+
+@misc{cmip5,
+  title = {CMIP5 Models and Grid Resolution},
+  howpublished = {\url{https://verc.enes.org/data/enes-model-data/cmip5/resolution}},
+}
+
+@misc{ifs-meta,
+  title = {IFS metadata},
+  howpublished = {\url{https://www.earthsystemcog.org/projects/dcmip-2012/ifs}},
+}
+
+@techreport{oasis3-mct,
+  author = {CERFACS},
+  title = {{OASIS3-MCT User Guide 3.0}},
+  institution = {CERFACS/CNRS SUC URA},
+  number = {TR/CMGC/15/38},
+  year = {2015},
+  url = {\url{http://www.cerfacs.fr/oa4web/oasis3-mct_3.0/oasis3mct_UserGuide.pdf}},
+}
+
+
+@techreport{nemo-per15,
+  author = {Oriol Tint{\'o} Prims and Miguel Castrillo and Harald Servat and Germ{\'a}n Llort and Kim Serradell and Oriol Mulla Valls and Francisco J. Doblas-Reyes},
+  title = {Optimization of an ocean model using performance tools},
+  institution = {Barcelona Supercomputing Center - Centro Nacional de Supercomputaci\'{o}n (BSC-CNS)},
+  year = {2015},
+  number = {BSC-CES-2015-002},
+}
+
+@book{nemo-book36,
+  author = {Madec, G. and the NEMO team},
+  title = {NEMO ocean engine (Draft edition r6039)},
+  publisher = {Note du P\^{o}le de mod\'{e}lisation, Institut Pierre-Simon Laplace (IPSL)},
+  place = {France},
+  number = {27},
+  issn = {1288-1619},
+  year = {2014},
+}
+
+@article{lim36,
+  author   = {Vancoppenolle, Martin and Fichefet, Thierry and Goosse, Hugues and Bouillon, Sylvain and Madec, Gurvan and Maqueda, Miguel Angel Morales},
+  title    = {{Simulating the mass balance and salinity of Arctic and Antarctic sea ice. 1. Model description and validation}},
+  journal  = {Ocean Modelling},
+  volume   = {27},
+  number   = {1--2},
+  pages    = {33--53},
+  year     = {2009},
+  issn     = {1463-5003},
+  doi      = {http://dx.doi.org/10.1016/j.ocemod.2008.10.005},
+  url      = {http://www.sciencedirect.com/science/article/pii/S1463500308001613},
+}
+
+
+@article{gmd-8-2991-2015,
+  author  = {Rousset, C and Vancoppenolle, M and Madec, G and Fichefet, T and Flavoni, S and Barth{\'{e}}lemy, A and Benshila, R and Chanut, J and Levy, C and Masson, S and Vivier, F},
+  title   = {{The Louvain-La-Neuve sea ice model LIM3.6: global and regional capabilities}},
+  journal = {Geoscientific Model Development},
+  volume  = {8},
+  number  = {10},
+  pages   = {2991--3005},
+  year    = {2015},
+  doi     = {10.5194/gmd-8-2991-2015},
+  url     = {http://www.geosci-model-dev.net/8/2991/2015/},
+}
+
+@misc{nemo-report,
+  title = {Towards generic scalability of NEMO; the oceanographic component of the Unified Model},
+  authors = {A. Porter and M. Ashworth}
+  howpublished = {\url{http://www.scd.stfc.ac.uk/SCD/resources/PDF/GSUM_NEMO_report.pdf}},
+}
+
+@article{ref1,
+  author = {Madec, Gurvan and Imbard, Maurice},
+  doi = {10.1007/BF00211684},
+  issn = {1432-0894},
+  journal = {Climate Dynamics},
+  number = {6},
+  pages = {381--388},
+  title = {{A global ocean mesh to overcome the North Pole singularity}},
+  url = {http://dx.doi.org/10.1007/BF00211684},
+  volume = {12}
+}
+
+@techreport{prace12,
+  author = {Chandan Basu},
+  title = {High Resolution EC Earth Porting and Benchmarking on Curie},
+  institution = {Partnership for Advanced Computing in Europe},
+  year = {2012},
+  howpublished = {\url{http://www.prace-ri.eu/IMG/pdf/High_Resolution_EC_Earth_Porting_and_Benchmarking_on_CURIE.pdf}},
+}
+
+@misc{ece-sim,
+  title = {EC-Earth simulations},
+  authors = {CNR},
+  howpublished = {\url{http://www.to.isac.cnr.it/ecearth/}},
+}
+
+@misc{introgeo,
+  title = {Using an Earth System Approach},
+  howpublished = {\url{http://serc.carleton.edu/introgeo/earthsystem/index.html}},
+}
+
+@misc{ipcc,
+  title = {The Intergovernmental Panel on Climate Change (IPCC)},
+  howpublished = {\url{http://www.ipcc.ch/}},
+}
+
+@misc{wmo-models,
+  author = {World Meteorological Organization (WMO)},
+  title = {Climate Models},
+  howpublished = {\url{https://www.wmo.int/pages/themes/climate/climate_models.php}},
+}
+
+@misc{spatial-ecmwf,
+  author = {ECMWF},
+  title = {Data spatial coordinate systems},
+  howpublished = {\url{https://web.archive.org/web/20131008022810/http://www.ecmwf.int/products/data/technical/gaussian/spatial_representations.html}},
+}
+
+
