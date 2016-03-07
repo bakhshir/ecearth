@@ -1,0 +1,94 @@
+
+\lstset{framextopmargin=5pt,frame=single,
+  numberstyle=\tiny, % the size of the fonts that are used for the line-numbers     
+    backgroundcolor=\color{lightgray},
+    basicstyle=\footnotesize\ttfamily,breaklines=true
+}
+  
+
+\newcommand{\question}[1]{\marginpar{\tiny\raggedright\textsf{\hspace{3pt}#1}}}
+\newcommand{\quotesrc}[1]{\footnote{Source: \url{#1}}}
+
+
+\newcommand*\safetilde[1]{%
+\begingroup%
+  \catcode`\~11%
+  \StrSubstitute{#1}{~}{\raise-0.85ex\hbox{\~{}}}%
+% -OR- LOW TILDE (faked low tilde - code lifted from url.sty)
+%  \makeatletter
+%  \StrSubstitute{#1}{~}{{\raise.45ex\hbox{\m@th$\scriptstyle\sim$}}}%
+%  \makeatother
+\endgroup%
+}
+
+\newcommand{\serifurl}[2]{%
+  \texttt{\href{#1://#2}{\safetilde{#2}}}%
+}
+
+
+\newcommand\BackgroundPic{%
+  \put(0,0){%
+  \parbox[b][\paperheight]{\paperwidth}{%
+    \vfill
+    \centering
+    \vspace{15cm}
+    \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{figs/logos/back.pdf}%
+    \vfill
+}}}
+   
+   
+\newcommand*{\titleBC}{\begingroup % Create the command for including the title page in the document
+\begin{center}
+ \includegraphics[scale=0.1]{figs/logos/ESCIENCE_logo_B_nl_long_cyanblack}\\[3.5\baselineskip] % Publisher logo 
+  \def\CP{\Huge \textbf{EC-EARTH}} % Title
+   \settowidth{\unitlength}{\CP} % Set the width of the curly brackets to the width of the title
+   \begin{flushleft}
+   {\CP} \\[\baselineskip] % Print title     
+   \vspace{3cm}
+   Author: Rena Bakhshi\\[\baselineskip]
+   \smallskip
+   Date: \today
+   \end{flushleft}
+\end{center} 
+\endgroup}
+
+
+
+
+
+% \newcommand*{\plogo}{\fbox{
+%       \includegraphics{figs/logos/ecearthmainlogo}
+%     }
+%   } % Generic publisher logo
+% 
+% 
+% 
+% %----------------------------------------------------------------------------------------
+% %  TITLE PAGE
+% %----------------------------------------------------------------------------------------
+% 
+% \newcommand*{\rotrt}[1]{\rotatebox{90}{#1}} % Command to rotate right 90 degrees
+% \newcommand*{\rotlft}[1]{\rotatebox{-90}{#1}} % Command to rotate left 90 degrees
+% 
+% \newcommand*{\titleBC}{\begingroup % Create the command for including the title page in the document
+% \centering % Center all text
+% 
+% \def\CP{\textit{\Huge EC-EARTH}} % Title
+% 
+% \settowidth{\unitlength}{\CP} % Set the width of the curly brackets to the width of the title
+% {\color{LightGoldenrod}\resizebox*{\unitlength}{\baselineskip}{\rotrt{$\}$}}} \\[\baselineskip] % Print top curly bracket
+% \textcolor{Sienna}{\CP} \\[\baselineskip] % Print title
+% {\color{RosyBrown}\Large Manual for Newbies} \\ % Tagline or further description
+% {\color{LightGoldenrod}\resizebox*{\unitlength}{\baselineskip}{\rotlft{$\}$}}} % Print bottom curly bracket
+% 
+% \vfill % Whitespace between the title and the author name
+% 
+% {\Large\textbf{Rena Bakhshi}}\\ % Author name
+% 
+% \vfill % Whitespace between the author name and the publisher logo
+% 
+% \plogo\\[0.5\baselineskip] % Publisher logo
+% \today % Year published
+% 
+% \endgroup}
+

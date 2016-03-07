@@ -1,0 +1,154 @@
+
+\chapter{Setup}
+%Compilation, running, make files, etc.
+Short guides for Building and Running EC-Earth 3 on various machines is described at~\cite{br-wiki}.
+
+\begin{enumerate}
+    \item Checkout HiRes development branch of EC-Earth: 
+    
+    \texttt{svn checkout \serifurl{http}{https://svn.ec-earth.org/ecearth3/branches/development/2016/r2811-hires}}
+    
+    or the main trunk:
+    
+    \texttt{svn --username XX checkout \serifurl{http}{https://svn.ec-earth.org/ecearth3/trunk}}
+    
+    \item Copy files ExpandNodeList and makedepf90 into the local bin folder.
+\end{enumerate}
+For the development guide, see~\cite{dev-guide}.
+
+\subsection*{Prerequisites}
+\begin{itemize}
+    \item Fortran 90 - fortran compiler
+    ...
+\end{itemize}
+
+
+\section{Compilation}
+\begin{lstlisting}
+# =========== COMPILATIONS ==================
+# config for compilations
+cconf32()
+{
+    cd ${ece32b}sources
+    ec-conf -p neuron-intel-intelmpi config-build.xml
+    cd -
+}
+#oasis (add realclean to the make command)
+coas32()
+{
+    cd ${ece32b}sources/oasis3-mct/util/make_dir
+    make BUILD_ARCH=ecconf -f TopMakefileOasis3
+    cd -
+}
+# xios. "--full" means recompile from scratch.
+cxios32()
+{
+    cd ${ece32b}sources/xios-1.0
+    ./make_xios --arch ecconf --use_oasis oasis3_mct --netcdf_lib netcdf4_seq --full --job 8
+    cd -
+}
+# runoff-mapper (make clean)
+crunoff32()
+{
+    cd ${ece32b}sources/runoff-mapper/src
+    make
+    cd -
+}
+# ifs (make realclean)
+cifs32()
+{
+    cwd=$PWD 
+    cd ${ece32b}sources/ifs-36r4
+    make BUILD_ARCH=ecconf -j 10 lib
+    if [ $? == 0 ]; then make BUILD_ARCH=ecconf master; fi
+    cd $cwd
+}
+
+# nemo (./makenemo clean)
+# requires arg. Can be ORCA025L75_LIM3, ORCA025L75_LIM3_standalone, 
+                    ORCA1L75_LIM3, ORCA1L75_LIM3_standalone,
+cnemo32()
+{
+    cd ${ece32b}sources/nemo-3.6/CONFIG
+    ./makenemo -n $@ -m ecconf -j 8
+    cd -
+} 
+
+# tm5 (pass -n to cleanup before)
+ectm532()
+{
+    cd ${ece32b}sources/tm5mp
+    setup_tm5 $@ ecconfig-ecearth3.rc
+    cd -
+}
+\end{lstlisting}
+
+After setting up proper paths in config-build.xml in the sources directory for the platform "neuron", the compilation proceeds as follows:
+\begin{verbatim}
+    cconf32 & cxios32 & crunoff32 & cifs32 & cnemo32  
+\end{verbatim}
+Note that XiOS is only compiled with g++ (investigate, why it requires ifort, even though it is a C++ program.)
+Perhaps the problem with the LD library? (PLT:ACTIVE:XIOS\_ADD\_LDFLAGS in config-build.xml file)
+Do not forget to run cconf32 if something is changed in config-build.xml file.
+
+\section{Running}
+Running on Bull, with SLURM system:
+\begin{lstlisting}
+# run IFS+NEMO
+function sub32 {
+    # run COUPLED
+    local hires=''
+    (( $# )) && [[ $1 = '-hr' ]] && hires=-hires
+    
+    cd ${ece32b}runtime/classic
+    ec-conf -p neuron config-run${hires}.xml
+    expn=$(get_ece_config_param.py config-run${hires}.xml GENERAL EXP_NAME)  ||  return 1
+    nifs=$(get_ece_config_param.py config-run${hires}.xml IFS NUMPROC)    ||  return 1
+    nnem=$(get_ece_config_param.py config-run${hires}.xml NEM NUMPROC)    ||  return 1
+    nxio=$(get_ece_config_param.py config-run${hires}.xml XIO NUMPROC)    ||  return 1
+    ppno=$(get_ece_config_param.py config-run${hires}.xml neuron PROC_PER_NODE) ||  return 1 
+    totp=$((nifs+nnem+nxio+1))
+    node=$(( totp/ppno ))
+    (( totp % ppno )) && (( node+=1 ))
+    echo "Submit: ifs${hires}(${nifs}) + nemo${hires}(${nnem}), exp=${expn} [-N${node} -n${totp} --ntasks-per-node=${ppno}]"
+    sbatch -N${node} -n${totp} --exclusive --account=ecearth --ntasks-per-node=${ppno} -o "out/${expn}${hires}.out.001" -e "out/${expn}${hires}.err.001" ./ece-ifs+nemo.sh
+    cd -
+}
+
+function sub32atm {
+    # run IFS alone
+    local hires=''
+    (( $# )) && [[ $1 = '-hr' ]] && hires=-hires
+
+    cd ${ece32b}runtime/classic
+    ec-conf -p neuron config-run${hires}.xml
+    expn=$(get_ece_config_param.py config-run${hires}.xml GENERAL EXP_NAME)  ||  return 1
+    nifs=$(get_ece_config_param.py config-run${hires}.xml IFS NUMPROC)    ||  return 1
+    ppno=$(get_ece_config_param.py config-run${hires}.xml neuron PROC_PER_NODE) ||  return 1
+    node=$(( nifs/ppno ))
+    (( nifs % ppno )) && (( node+=1 ))
+    echo "Submit: ifs${hires}(${nifs}), exp=${expn} [-N${node} -n${nifs} --ntasks-per-node=${ppno}]"
+    sbatch -N${node} -n${nifs} --exclusive --account=ecearth --ntasks-per-node=${ppno} -o "out/${expn}${hires}.out.001" -e "out/${expn}${hires}.err.001" ./ece-ifs.sh
+    cd -
+}
+
+function sub32oce {
+    # run NEMO alone
+    local hires=''
+    (( $# )) && [[ $1 = '-hr' ]] && hires=-hires
+
+    cd ${ece32b}runtime/classic
+    ec-conf -p neuron config-run${hires}.xml
+    expn=$(get_ece_config_param.py config-run${hires}.xml GENERAL EXP_NAME)  ||  return 1
+    nnem=$(get_ece_config_param.py config-run${hires}.xml NEM NUMPROC)    ||  return 1
+    nxio=$(get_ece_config_param.py config-run${hires}.xml XIO NUMPROC)    ||  return 1
+    ppno=$(get_ece_config_param.py config-run${hires}.xml neuron PROC_PER_NODE) ||  return 1
+    totp=$((nnem+nxio))
+    node=$(( totp/ppno ))
+    (( totp % ppno )) && (( node+=1 ))
+    echo "Submit: nemo${hires}(${nnem}), exp=${expn} [-N${node} -n${totp} --ntasks-per-node=${ppno}]"
+    sbatch -N${node} -n${totp} --exclusive --account=ecearth --ntasks-per-node=${ppno} -o "out/${expn}${hires}.out.001" -e "out/${expn}${hires}.err.001" ./ece-nemo.sh
+    cd -
+}
+
+\end{lstlisting}

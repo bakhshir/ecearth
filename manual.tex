@@ -1,0 +1,31 @@
+\documentclass{report}
+
+\input{packages}
+
+\input{macro}
+
+
+
+
+
+\begin{document} 
+
+\thispagestyle{empty} % Removes page number
+\titleBC % This command includes the title page
+\AddToShipoutPicture*{\BackgroundPic}
+
+\pagestyle{plain}
+\tableofcontents
+
+\input{background}
+\input{setup}
+\input{analysis}
+
+
+\bibliographystyle{plain}
+\bibliography{pubs}  
+
+
+
+
+\end{document}
