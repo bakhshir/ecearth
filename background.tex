@@ -103,8 +103,45 @@ EC-Earth (version 3.2) consists of multiple components, some of which can be run
 \end{itemize}
 
 \subsection{IFS}
-The IFS uses a linear reduced Gaussian grid for computation in grid point space. All prognostic variables are co-located at the grid points of the Gaussian grid~\cite{ifs-meta}.
 
+\iffalse
+%src: http://computing.io/wp/2012/02/ecmwf-model-data/
+ECMWF run the Integrated Forecast System (IFS). This is a spectral model; in 2006 the deterministic operational model ran at a resolution of 
+a resolution of T799L91. A summary of this is:
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|p{4cm} |p{3cm} |p{3cm}| p{3cm}| p{3cm}}
+    \toprule
+    Numerical scheme   & $\textrm{T}_\textrm{L}$799L91  & $\textrm{T}_\textrm{L}$511L60 & $\textrm{T}_\textrm{L}$319L60 & T213L31\\
+    \midrule
+    Triangular truncation, resolving up to wavenr.  & 799  &  511 &  319 & 213\\
+                                                       & \multicolumn{3}{|p{0.4\textwidth}|}{(in spectral space, linear reduced GG)} 
+                                                       & around a great circle on the globe \\ \hline
+    (Vertical) Levels between the Earth's surface & 91 and 80km  & 60 and 70km & 60 and 70km & 31 and 30km\\
+                                                  &  \multicolumn{3}{|p{0.5\textwidth}|}{Semi-Lagrangian two-time-level semi-implicit formulation} 
+                                                  & Semi-Lagrangian formulation \\ \hline
+    Time-step   & 12min & 15min & 20min & 15min \\
+    Smallest wavelength resolved  & 50km & 80km & 125km & 190km \\
+    \# grid points in model & 76,757,590 and 3,373,960 &
+    20,911,680 and 1,394,112 & 8,300,760 and 553,384 & 4,154,868\\
+                                                & \multicolumn{3}{|p{0.4\textwidth}|}{(in upper air and in (sub-)surface layers)} 
+                                                & \\ \hline
+    Grid for computation of physical processes is the GG, on which single level parameters are available (The avg distance between grid points)  & close to 25km
+    & close to 39km &  close to 62km & \\
+    Variables at each grid point &
+      \multicolumn{3}{|p{0.5\textwidth}|}{wind, temperature, humidity, cloud fraction and water/ice content (also (recalculated at each time-step) pressure at surface grid-points), ozone} 
+      & Wind, temperature, humidity (also pressure at surface grid-points) \\
+    \bottomrule
+\end{tabular}
+\caption{TL}
+\label{tab:spac-coord}
+\end{table}  
+
+\fi
+
+The IFS uses a linear reduced Gaussian grid (GG) for computation in grid point space. All prognostic variables are co-located at the grid points of the GG~\cite{ifs-meta}. %
 GRIB data is archived in one of the following spatial coordinate systems~\cite{spatial-ecmwf}:   
 \begin{itemize}
     \item Spherical Harmonics (SH) - Upper air fields.
@@ -115,24 +152,24 @@ The correspondence between the three types of grid resolutions is as shown in Ta
     
 \begin{table}[h!]
 \centering
-\begin{tabular}{|l|c|c|}
+\begin{tabular}{|l|c|c|c|c|}
     \hline      
-    Spectral  & Gaussian  & Lat/lon\\
+    Spectral  & GG  & LL & H-grid res & Model Level V-res\\
     \hline
-    T63  & N48  & 1.875\\
-    TL95  & N48  & 1.875\\
-    T106  & N80  & 1.125\\
-    TL159  & N80  & 1.125\\
-    T213  & N160  & 0.5625\\
-    TL255  & N128  & 0.7\\
-    TL319  & N160  & 0.5625\\
-    TL399  & N200  & 0.450\\
-    TL511  & N256  & 0.351\\
-    TL639  & N320  & 0.28125\\
-    TL799  & N400  & 0.225\\
-    TL1023  & N512  & 0.176\\
-    TL1279  & N640  & 0.141\\
-    TL2047  & N1024  & 0.088\\  
+    T63  & N48  & 1.875 & $\sim$ 80km & 31\\
+    TL95  & N48  & 1.875 & $\sim$ 200km & 40\\
+    T106  & N80  & 1.125 & $\sim$ 125km & 31 \\
+    TL159  & N80  & 1.125 & $\sim$ 125km & 62\\
+    T213  & N160  & 0.5625 & $\sim$ 85km & 31\\
+    TL255  & N128  & 0.7 & $\sim$ 80km & 91\\
+    TL319  & N160  & 0.5625 & $\sim$ 60km & 62\\
+    TL399  & N200  & 0.450 & $\sim$ 50km & 62 \\
+    TL511  & N256  & 0.351 & $\sim$ 40km & 91 \\
+    TL639  & N320  & 0.28125 & $\sim$ 30km & 62\\
+    TL799  & N400  & 0.225 & $\sim$ 25km & 91\\
+    TL1023  & N512  & 0.176 & $\sim$ 20km & 91\\
+    TL1279  & N640  & 0.141 & $\sim$ 16km & 91\\
+    TL2047  & N1024  & 0.088 & $\sim$ 10km & 137\\  
     \hline
 \end{tabular}
 \caption{Data spatial coordinate systems}
@@ -155,9 +192,8 @@ The correspondence between the three types of grid resolutions is as shown in Ta
 Table~\ref{tab:ifs-grid} presents the model horizontal resolution, radiation grid resolution and time-step in the various configurations of the IFS from T159 to T1279~\cite{1399454274743}.
 
 
-Also, IFS has stochastic physics flag. 
-
-TODO:  IFS model levels
+%Also, IFS has stochastic physics flag. 
+%TODO:  IFS model levels
 
 \subsection{NEMO}
 
@@ -193,9 +229,9 @@ TODO:Nemo grid size further
 %\cite{Alexander2011}
 Since the climate system is highly interconnected, EC-Earth requires code to tie the components together - interpolating fluxes between grids and controlling interactions between components. These tasks are performed by the coupler.
 
-OASIS is a software interface to couple existing ocean and atmosphere models. At run-time, OASIS3-MCT~\cite{oasis3-mct} allows exchanging coupling data between two components as well as interpolation and transformation of these coupling fields. 
+OASIS~\cite{gmd-6-373-2013} is a software interface to couple existing ocean and atmosphere models. At run-time, OASIS3-MCT~\cite{oasis3-mct} allows exchanging coupling data between two components as well as interpolation and transformation of these coupling fields. 
 
-TODO: Oasis frequency
+%TODO: Oasis frequency
 
 
 \subsection{CMIPs}
