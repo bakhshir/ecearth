@@ -81,7 +81,7 @@ NEMO for the ocean, and LIM for the sea-ice, coupled through OASIS, and so on (s
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=0.5]{figs/cw2015-ec-earth}
-    \caption{Earth cycle}
+    \caption{Earth cycle} %FIXME: IFS outputs grib files, ref~\cite{ece-output}, NEMO includes LIM3, revise the rest of diagram
     \label{fig:ecearth}
 \end{figure}
 
@@ -91,11 +91,11 @@ Climate Services by partners in different European countries (notably the Nether
 Ireland). Also many sensitivity studies are conducted.
 
 
-EC-Earth (version 3.2) consists of multiple components, some of which can be run standalone:
+EC-Earth (v3.2) consists of multiple components, some of which can be run standalone:
 \begin{itemize}
     \item IFS: representing the atmosphere;
-    \item NEMO (3.6) representing the ocean;
-    \item LIM (3): representing the sea-ice, is a part of ocean model;
+    \item NEMO (v3.6) representing the ocean;
+    \item LIM (v3): representing the sea-ice, is a part of ocean model;
     \item HTESSEL: representing the continental surfaces and vegetation;
     \item TM5: representing the atmospheric chemistry;
     \item the coupler OASIS3-MCT;
@@ -229,7 +229,8 @@ TODO:Nemo grid size further
 %\cite{Alexander2011}
 Since the climate system is highly interconnected, EC-Earth requires code to tie the components together - interpolating fluxes between grids and controlling interactions between components. These tasks are performed by the coupler.
 
-OASIS~\cite{gmd-6-373-2013,TM673} is a software interface to couple existing ocean and atmosphere models. At run-time, OASIS3-MCT~\cite{oasis3-mct} allows exchanging coupling data between two components as well as interpolation and transformation of these coupling fields. 
+OASIS~\cite{gmd-6-373-2013} is a software interface to couple existing ocean and atmosphere models. At run-time, OASIS3-MCT~\cite{oasis3-mct} allows exchanging coupling data between two components as well as interpolation and transformation of these coupling fields 
+(cf.~\cite{TM673} for older version of EC-Earth).
 
 %TODO: Oasis frequency
 
