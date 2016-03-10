@@ -87,9 +87,21 @@ After setting up proper paths in config-build.xml in the sources directory for t
 \begin{verbatim}
     cconf32 & cxios32 & crunoff32 & cifs32 & cnemo32  
 \end{verbatim}
-Note that XiOS is only compiled with g++ (investigate, why it requires ifort, even though it is a C++ program.)
-Perhaps the problem with the LD library? (PLT:ACTIVE:XIOS\_ADD\_LDFLAGS in config-build.xml file)
-Do not forget to run cconf32 if something is changed in config-build.xml file.
+Note that XiOS is only compiled with g++ and its fortran interface is compiled with the available fortran compiler. As discussed below, it is not possible to use gfortran for the latter. Do not forget to run cconf32 if something is changed in config-build.xml file.
+
+We have tested a local compilation of ec-earth 3.2b with the GNU compiler suite (gcc, g++ and gfortran) and the openMPI implementation of the message passing interface. In the build configuration file it is necessary to assign the following parameter values:
+\begin{center}
+\begin{tabular}{ll}
+\texttt{FC}&\texttt{gfortran}\\
+\texttt{FFLAGS}&\texttt{-O2 -g -fdefault-real-8 -fdefault-double-8 -ffree-line-length-none}\\
+\texttt{FPP}&\texttt{gfortran -cpp}\\
+\texttt{FFLAGS\_FREEFORM}&\texttt{-ffree-form}\\
+\texttt{FFLAGS\_FIXEDFORM}&\texttt{-ffixed-form}\\
+\texttt{FFLAGS\_FPP\_PREFIX}&\texttt{-D}\\
+\texttt{MPI\_LIBS\_WITHOUT\_L}&\texttt{mpi mpi\_cxx mpi\_f77 mpi\_f90}\\
+\end{tabular}
+\end{center}
+Unfortunately the Xios-1.0 component will not compile with the above settings in the current revision (2882). This is due to the fact that it uses token concatenation in its Fortran interface files, which is not substituted by gcc. Hence we advice strongly to install ifort before compiling ec-earth including Xios at this point. 
 
 \section{Running}
 Running on Bull, with SLURM system:
