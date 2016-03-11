@@ -3,27 +3,42 @@
 %Compilation, running, make files, etc.
 Short guides for Building and Running EC-Earth 3 on various machines is described at~\cite{br-wiki}.
 
-\begin{enumerate}
-    \item Checkout HiRes development branch of EC-Earth: 
+Prior to compilation step, EC-EARTH build scripts need to be adjusted to the local environment. 
+First, the source code of EC-Earth v3.2 HiRes development branch can be obtained from the svn repository: 
     
-    \texttt{svn checkout \serifurl{http}{https://svn.ec-earth.org/ecearth3/branches/development/2016/r2811-hires}}
+    \begin{center}
+      \code{svn checkout \serifurl{http}{https://svn.ec-earth.org/ecearth3/branches/development/2016/r2811-hires}}
+    \end{center}
     
-    or the main trunk:
-    
-    \texttt{svn --username XX checkout \serifurl{http}{https://svn.ec-earth.org/ecearth3/trunk}}
-    
-    \item Copy files ExpandNodeList and makedepf90 into the local bin folder.
-\end{enumerate}
+Note that the main trunk is located at:
+
+    \begin{center}
+      \code{svn --username XX checkout \serifurl{http}{https://svn.ec-earth.org/ecearth3/trunk}}
+    \end{center}
+
+
+Secondly, make sure that \code{ExpandNodeList} is %and makedepf90 are 
+in the local \code{bin} folder. 
+(The utility \code{ExpandNodeList} is used to expand and collect node lists as used by SLURM, in order to perform set operations on them.)
+
+The file \code{build-config.xml} in \code{sources} folder contains environmental variables and paths for the different platforms. 
+KNMI works with the \emph{neuron} platform. The paths should be set properly. 
+
+
+
 For the development guide, see~\cite{dev-guide}.
 
-\subsection*{Prerequisites}
+
+
+\section{Compilation}
+
+The compilation step requires:
 \begin{itemize}
     \item Fortran 90 - fortran compiler
     ...
 \end{itemize}
 
 
-\section{Compilation}
 
 \begin{lstlisting}
 # =========== COMPILATIONS ==================
@@ -84,7 +99,7 @@ ectm532()
 }
 \end{lstlisting}
 
-After setting up proper paths in config-build.xml in the sources directory for the platform "neuron", the compilation proceeds as follows:
+After setting up proper paths in \code{config-build.xml}, the compilation proceeds as follows:
 \begin{verbatim}
     cconf32 & cxios32 & crunoff32 & cifs32 & cnemo32  
 \end{verbatim}
@@ -93,7 +108,7 @@ Perhaps the problem with the LD library? (PLT:ACTIVE:XIOS\_ADD\_LDFLAGS in confi
 Do not forget to run cconf32 if something is changed in config-build.xml file.
 
 \section{Running}
-Running on Bull, with SLURM system:
+Running on Bull, with SLURM system~\cite{slurm}:
 \begin{lstlisting}
 # run IFS+NEMO
 function sub32 {
