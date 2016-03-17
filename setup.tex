@@ -17,14 +17,29 @@ Note that the main trunk is located at:
     \end{center}
 
 
-Secondly, make sure that \code{ExpandNodeList} is %and makedepf90 are 
+Secondly, make sure that \code{ExpandNodeList} and \code{makedepf90} are 
 in the local \code{bin} folder. 
-(The utility \code{ExpandNodeList} is used to expand and collect node lists as used by SLURM, in order to perform set operations on them.)
+(\code{ExpandNodeList} is used to expand and collect node lists as used by SLURM, in order to perform set operations on them. 
+The utility c\code{makedepf90} creates automatically Makefile dependency lists for Fortran source code; it is shipped together with EC-Earth, but the compiled version 
+is a platform-dependent.)
 
 The file \code{build-config.xml} in \code{sources} folder contains environmental variables and paths for the different platforms. 
-KNMI works with the \emph{neuron} platform. The paths should be set properly. 
-
-
+KNMI works with the \emph{neuron} platform. The paths should be set properly, in particular, \code{ECEARTH\_SRC\_DIR} and libraries -- 
+base directories of:
+\begin{center}
+\begin{tabular}{ll}
+MPI & \code{MPI\_BASE\_DIR}\\ 
+LAPACK & \code{LAPACK\_BASE\_DIR}\\ 
+JPEG used for compression in HDF & \code{JPEG\_BASE\_DIR}\\ 
+SZIP & \code{SZIP\_BASE\_DIR}\\ 
+Hdf4 & \code{HDF4\_BASE\_DIR}\\ 
+Hdf5 & \code{HDF5\_BASE\_DIR}\\ 
+NetCDF & \code{NETCDF\_BASE\_DIR}\\ 
+GRIB API & \code{GRIBAPI\_BASE\_DIR}\\ 
+GRIBEX & \code{GRIBEX\_BASE\_DIR}\\ 
+F90 dependency generator & \code{MAKEDEPF90}
+\end{tabular}
+\end{center}
 
 For the development guide, see~\cite{dev-guide}.
 
@@ -40,69 +55,11 @@ The compilation step requires:
 
 
 
-\begin{lstlisting}
-# =========== COMPILATIONS ==================
-# config for compilations
-cconf32()
-{
-    cd ${ece32b}sources
-    ec-conf -p neuron-intel-intelmpi config-build.xml
-    cd -
-}
-#oasis (add realclean to the make command)
-coas32()
-{
-    cd ${ece32b}sources/oasis3-mct/util/make_dir
-    make BUILD_ARCH=ecconf -f TopMakefileOasis3
-    cd -
-}
-# xios. "--full" means recompile from scratch.
-cxios32()
-{
-    cd ${ece32b}sources/xios-1.0
-    ./make_xios --arch ecconf --use_oasis oasis3_mct --netcdf_lib netcdf4_seq --full --job 8
-    cd -
-}
-# runoff-mapper (make clean)
-crunoff32()
-{
-    cd ${ece32b}sources/runoff-mapper/src
-    make
-    cd -
-}
-# ifs (make realclean)
-cifs32()
-{
-    cwd=$PWD 
-    cd ${ece32b}sources/ifs-36r4
-    make BUILD_ARCH=ecconf -j 10 lib
-    if [ $? == 0 ]; then make BUILD_ARCH=ecconf master; fi
-    cd $cwd
-}
-
-# nemo (./makenemo clean)
-# requires arg. Can be ORCA025L75_LIM3, ORCA025L75_LIM3_standalone, 
-                    ORCA1L75_LIM3, ORCA1L75_LIM3_standalone,
-cnemo32()
-{
-    cd ${ece32b}sources/nemo-3.6/CONFIG
-    ./makenemo -n $@ -m ecconf -j 8
-    cd -
-} 
-
-# tm5 (pass -n to cleanup before)
-ectm532()
-{
-    cd ${ece32b}sources/tm5mp
-    setup_tm5 $@ ecconfig-ecearth3.rc
-    cd -
-}
-\end{lstlisting}
-
 After setting up proper paths in \code{config-build.xml}, the compilation proceeds as follows:
 \begin{verbatim}
-    cconf32 & cxios32 & crunoff32 & cifs32 & cnemo32  
+    cconf32 & coas32 & cxios32 & crunoff32 & cifs32 & cnemo32  
 \end{verbatim}
+For more details on these functions, see Listing~\ref{app:comp} in the appendix. 
 Note that XiOS is only compiled with g++ and its fortran interface is compiled with the available fortran compiler. As discussed below, it is not possible to use gfortran for the latter. Do not forget to run cconf32 if something is changed in config-build.xml file.
 
 We have tested a local compilation of ec-earth 3.2b with the GNU compiler suite (gcc, g++ and gfortran) and the openMPI implementation of the message passing interface. In the build configuration file it is necessary to assign the following parameter values:
@@ -120,63 +77,10 @@ We have tested a local compilation of ec-earth 3.2b with the GNU compiler suite 
 Unfortunately the Xios-1.0 component will not compile with the above settings in the current revision (2882). This is due to the fact that it uses token concatenation in its Fortran interface files, which is not substituted by gcc. Hence we advice strongly to install ifort before compiling ec-earth including Xios at this point. 
 
 \section{Running}
-Running on Bull, with SLURM system~\cite{slurm}:
-\begin{lstlisting}
-# run IFS+NEMO
-function sub32 {
-    # run COUPLED
-    local hires=''
-    (( $# )) && [[ $1 = '-hr' ]] && hires=-hires
-    
-    cd ${ece32b}runtime/classic
-    ec-conf -p neuron config-run${hires}.xml
-    expn=$(get_ece_config_param.py config-run${hires}.xml GENERAL EXP_NAME)  ||  return 1
-    nifs=$(get_ece_config_param.py config-run${hires}.xml IFS NUMPROC)    ||  return 1
-    nnem=$(get_ece_config_param.py config-run${hires}.xml NEM NUMPROC)    ||  return 1
-    nxio=$(get_ece_config_param.py config-run${hires}.xml XIO NUMPROC)    ||  return 1
-    ppno=$(get_ece_config_param.py config-run${hires}.xml neuron PROC_PER_NODE) ||  return 1 
-    totp=$((nifs+nnem+nxio+1))
-    node=$(( totp/ppno ))
-    (( totp % ppno )) && (( node+=1 ))
-    echo "Submit: ifs${hires}(${nifs}) + nemo${hires}(${nnem}), exp=${expn} [-N${node} -n${totp} --ntasks-per-node=${ppno}]"
-    sbatch -N${node} -n${totp} --exclusive --account=ecearth --ntasks-per-node=${ppno} -o "out/${expn}${hires}.out.001" -e "out/${expn}${hires}.err.001" ./ece-ifs+nemo.sh
-    cd -
-}
-
-function sub32atm {
-    # run IFS alone
-    local hires=''
-    (( $# )) && [[ $1 = '-hr' ]] && hires=-hires
-
-    cd ${ece32b}runtime/classic
-    ec-conf -p neuron config-run${hires}.xml
-    expn=$(get_ece_config_param.py config-run${hires}.xml GENERAL EXP_NAME)  ||  return 1
-    nifs=$(get_ece_config_param.py config-run${hires}.xml IFS NUMPROC)    ||  return 1
-    ppno=$(get_ece_config_param.py config-run${hires}.xml neuron PROC_PER_NODE) ||  return 1
-    node=$(( nifs/ppno ))
-    (( nifs % ppno )) && (( node+=1 ))
-    echo "Submit: ifs${hires}(${nifs}), exp=${expn} [-N${node} -n${nifs} --ntasks-per-node=${ppno}]"
-    sbatch -N${node} -n${nifs} --exclusive --account=ecearth --ntasks-per-node=${ppno} -o "out/${expn}${hires}.out.001" -e "out/${expn}${hires}.err.001" ./ece-ifs.sh
-    cd -
-}
-
-function sub32oce {
-    # run NEMO alone
-    local hires=''
-    (( $# )) && [[ $1 = '-hr' ]] && hires=-hires
-
-    cd ${ece32b}runtime/classic
-    ec-conf -p neuron config-run${hires}.xml
-    expn=$(get_ece_config_param.py config-run${hires}.xml GENERAL EXP_NAME)  ||  return 1
-    nnem=$(get_ece_config_param.py config-run${hires}.xml NEM NUMPROC)    ||  return 1
-    nxio=$(get_ece_config_param.py config-run${hires}.xml XIO NUMPROC)    ||  return 1
-    ppno=$(get_ece_config_param.py config-run${hires}.xml neuron PROC_PER_NODE) ||  return 1
-    totp=$((nnem+nxio))
-    node=$(( totp/ppno ))
-    (( totp % ppno )) && (( node+=1 ))
-    echo "Submit: nemo${hires}(${nnem}), exp=${expn} [-N${node} -n${totp} --ntasks-per-node=${ppno}]"
-    sbatch -N${node} -n${totp} --exclusive --account=ecearth --ntasks-per-node=${ppno} -o "out/${expn}${hires}.out.001" -e "out/${expn}${hires}.err.001" ./ece-nemo.sh
-    cd -
-}
-
-\end{lstlisting}
+There are three options of running EC-Earth on Bull with SLURM system~\cite{slurm}:
+\begin{itemize}
+  \item \code{sub32atm} for the atmosphere standalone model;    
+  \item \code{sub32oce} for the ocean standalone model;    
+  \item \code{sub32} for the coupled model.
+\end{itemize}
+These functions are presented in Listing~\ref{app:run} in the appendix. All functions have an option \code{-hr} for runs in high resolution. 
