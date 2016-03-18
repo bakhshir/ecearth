@@ -256,8 +256,6 @@ CMIP has developed in phases, with the simulations of the fifth phase, CMIP5, no
 
 For more information on CMIP5 models and their resolutions, we refer to~\cite{cmip5}.
 
-\section{Input data}
-%   Resolution description, its list and the description of each file, grid type
 
 \subsection{Resolutions and grid sizes}
 See Tables~\ref{tab:ifs-grid},~\ref{tab:nemo-grid},~\ref{tab:spac-coord}.
@@ -265,27 +263,6 @@ See Tables~\ref{tab:ifs-grid},~\ref{tab:nemo-grid},~\ref{tab:spac-coord}.
 %golfstream is not correct in lowres
 %EN4 (1950), 50 years; keeping forcing constant for 1950; till 2050
 % start greenhouse gas forcing from 2014
-
-The \texttt{namcouple.sh} file contains the following information regarding IFS and NEMO:
-
-\begin{lstlisting}
-    159) atm_grid=A080
-        atm_nx=35718
-        ;;
-    255) atm_grid=A128
-        atm_nx=88838
-        nem_nx=362
-        nem_ny=292
-        ;;
-    511) atm_grid=A256
-        atm_nx=348528
-        nem_nx=1442
-        nem_ny=1021
-        ;;
-    799) atm_grid=A400
-        atm_nx=843490  
-\end{lstlisting}
-
 
 
 
@@ -298,3 +275,4 @@ The \texttt{namcouple.sh} file contains the following information regarding IFS 
 Solver algorithms choices
 
 %s discretized on a regular  latitude-longitude  grid.
+% CMORize is to convert netCDF output file to a std output with agreed variables with metadata (CF convent)
