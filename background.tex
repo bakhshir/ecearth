@@ -227,10 +227,11 @@ TODO:Nemo grid size further
 
 \subsection{OASIS}
 %\cite{Alexander2011}
-Since the climate system is highly interconnected, EC-Earth requires code to tie the components together - interpolating fluxes between grids and controlling interactions between components. These tasks are performed by the coupler.
+The climate system is highly interconnected, EC-Earth requires code to tie the components together - interpolating fluxes between grids and controlling interactions between components. These tasks are performed by the coupler.
 
 OASIS~\cite{gmd-6-373-2013} is a software interface to couple existing ocean and atmosphere models. At run-time, OASIS3-MCT~\cite{oasis3-mct} allows exchanging coupling data between two components as well as interpolation and transformation of these coupling fields 
 (cf.~\cite{TM673} for older version of EC-Earth).
+%\cite{Valcke2013}. To prevent the different components having to wait for each other, IFS runs one exchange time interval ahead of the other modules.
 
 %TODO: Oasis frequency
 
@@ -244,6 +245,7 @@ OASIS~\cite{gmd-6-373-2013} is a software interface to couple existing ocean and
 %     the dynamic vegetation component (LPJ-GUESS) has the same surface grid over land as IFS, and uses a daily time step
 %  
 
+%Other components such as TM5 \cite{doi:10.5194/gmd-7-2435-2014}
 
 
 \subsection{CMIPs}
@@ -294,3 +296,5 @@ The \texttt{namcouple.sh} file contains the following information regarding IFS 
 
 \section{Internal algorithms}
 Solver algorithms choices
+
+%s discretized on a regular  latitude-longitude  grid.
