@@ -56,9 +56,9 @@ for supercomputers. In fact it can take several months just to complete a 50 yea
 When it comes to simulating the general behaviour of the climate system over lengthy periods, however, 
 it is essential to use models that represent, and where necessary conserve, the important properties of the 
 atmosphere, land surface and the oceans in three dimensions. At the interfaces, the atmosphere is coupled to the land 
-and oceans through exchanges of heat, moisture and momentum. These models of the climate system are usually known as coupled global climate models (GCMs)~\cite{wmo-models}.
+and oceans through exchanges of heat, moisture and momentum. These models of the climate system are usually known as coupled \glspl{GCM}~\cite{wmo-models}.
 
-Coupling the ocean processes to atmospheric GCMs is a major challenge. The thermal capacity of the oceans is massive compared to 
+Coupling the ocean processes to atmospheric \glspl{GCM} is a major challenge. The thermal capacity of the oceans is massive compared to 
 the atmosphere and can provide to, or extract from, the atmosphere, massive amounts of latent and thermal heat. Representing their 
 heat storage, and the absorption of greenhouse gases by the oceans, in long-term simulations of climate requires a full three-dimensional 
 ocean model, which simulates even the deep currents. Changes in the intensity and location of deep-water currents can ultimately have 
@@ -74,14 +74,14 @@ EC-Earth~\cite{Hazeleger2010,Hazeleger2012} is an Earth system model implemented
 % src: https://verc.enes.org/models/earthsystem-models/ec-earth-1/ec-earth
 It is developed by the EC-Earth consortium, gathering a number of national weather services 
 and universities from currently 11 countries in Europe. EC-Earth component models are IFS for the atmosphere, 
-NEMO for the ocean, and LIM for the sea-ice, coupled through OASIS, and so on (see Figure~\ref{fig:ecearth}). 
+\acrshort{NEMO} for the ocean, and LIM for the sea-ice, coupled through OASIS, and so on (see Figure~\ref{fig:ecearth}). 
 
 
 
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=0.5]{figs/cw2015-ec-earth}
-    \caption{Earth cycle} %FIXME: IFS outputs grib files, ref~\cite{ece-output}, NEMO includes LIM3, revise the rest of diagram
+    \caption{Earth cycle} %FIXME: IFS outputs grib files, ref~\cite{ece-output}, \acrshort{NEMO} includes LIM3, revise the rest of diagram
     \label{fig:ecearth}
 \end{figure}
 
@@ -94,7 +94,7 @@ Ireland). Also many sensitivity studies are conducted.
 EC-Earth (v3.2) consists of multiple components, some of which can be run standalone:
 \begin{itemize}
     \item IFS: representing the atmosphere;
-    \item NEMO (v3.6) representing the ocean;
+    \item \acrshort{NEMO} (v3.6) representing the ocean;
     \item LIM (v3): representing the sea-ice, is a part of ocean model;
     \item HTESSEL: representing the continental surfaces and vegetation;
     \item TM5: representing the atmospheric chemistry;
@@ -106,7 +106,7 @@ EC-Earth (v3.2) consists of multiple components, some of which can be run standa
 
 \iffalse
 %src: http://computing.io/wp/2012/02/ecmwf-model-data/
-ECMWF run the Integrated Forecast System (IFS). This is a spectral model; in 2006 the deterministic operational model ran at a resolution of 
+ECMWF run the Integrated Forecast System (\glspl{IFS}). This is a spectral model; in 2006 the deterministic operational model ran at a resolution of 
 a resolution of T799L91. A summary of this is:
 
 \begin{table}[h!]
@@ -141,8 +141,8 @@ a resolution of T799L91. A summary of this is:
 
 \fi
 
-The IFS uses a linear reduced Gaussian grid (GG) for computation in grid point space. All prognostic variables are co-located at the grid points of the GG~\cite{ifs-meta}. %
-GRIB data is archived in one of the following spatial coordinate systems~\cite{spatial-ecmwf}:   
+The \gls{IFS} uses a linear reduced Gaussian grid (GG) for computation in grid point space. All prognostic variables are co-located at the grid points of the GG~\cite{ifs-meta}. %
+\gls{GRIB} data is archived in one of the following spatial coordinate systems~\cite{spatial-ecmwf}:   
 \begin{itemize}
     \item Spherical Harmonics (SH) - Upper air fields.
     \item Gaussian Grid (GG) - Surface and some upper air fields.
@@ -197,10 +197,10 @@ Table~\ref{tab:ifs-grid} presents the model horizontal resolution, radiation gri
 
 \subsection{NEMO}
 
-NEMO (Nucleus for European Modelling of the Ocean)~\cite{nemo-book36}
+\gls{NEMO} ~\cite{nemo-book36}
 
-In the form suitable for running on massively-parallel architectures, NEMO is a Fortran90 code that uses the Message Passing Interface (MPI) library for inter-process
-communication. When running a whole-Earth configuration, the PEs along the northern-most boundary of the domain are collected into an additional MPI communicator. Further
+In the form suitable for running on massively-parallel architectures, \gls{NEMO} is a Fortran90 code that uses the MPI library for inter-process
+communication. When running a whole-Earth configuration, the PEs along the northern-most boundary of the domain are collected into an additional \gls{MPI} communicator. Further
 computation and communication is performed within this communicator to deal with the boundary conditions imposed by the poles~\cite{nemo-report}. In NEMO, the mesh poles are moved to land points~\cite{ref1}.
 
 LIM3~\cite{lim36,gmd-8-2991-2015}
@@ -223,7 +223,7 @@ LIM3~\cite{lim36,gmd-8-2991-2015}
 \label{tab:nemo-grid}
 \end{table}
 
-TODO:Nemo grid size further
+TODO:\gls{NEMO} grid size further
 
 \subsection{OASIS}
 %\cite{Alexander2011}
@@ -275,4 +275,4 @@ See Tables~\ref{tab:ifs-grid},~\ref{tab:nemo-grid},~\ref{tab:spac-coord}.
 Solver algorithms choices
 
 %s discretized on a regular  latitude-longitude  grid.
-% CMORize is to convert netCDF output file to a std output with agreed variables with metadata (CF convent)
+% 

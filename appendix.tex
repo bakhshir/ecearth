@@ -1,7 +1,11 @@
+
+
+
+\appendix
 \chapter{Appendix}
 \section{Compilation}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Compilation functions},label={app:comp},language=Bash]
 # =========== COMPILATIONS ==================
 # config for compilations
 cconf32()
@@ -58,11 +62,9 @@ ectm532()
     setup_tm5 $@ ecconfig-ecearth3.rc
     cd -
 }
-\caption{Compilation functions}
-\label{app:comp}
 \end{lstlisting}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Run functions},label={app:run},language=Bash]
 # run IFS+NEMO
 function sub32 {
     # run COUPLED
@@ -120,20 +122,7 @@ function sub32oce {
     cd -
 }
 
-\caption{Run functions}
-\label{app:run}
 \end{lstlisting}
 
-\iffalse
-\section{Glossary and Abbreviations}
-
-\newglossaryentry{term}
-{
-  name=term,
-  description={is a test term}
-}
-\newacronym[longplural={Frames per Second}]{fpsLabel}{FPS}{Frame per Second}
 
 \printglossaries
-
-\fi

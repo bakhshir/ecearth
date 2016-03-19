@@ -17,11 +17,8 @@ Note that the main trunk is located at:
     \end{center}
 
 
-Secondly, make sure that \code{ExpandNodeList} and \code{makedepf90} are 
+Secondly, make sure that \code{\gls{ExpandNodeList}} and \code{\gls{makedepf90}} are 
 in the local \code{bin} folder. 
-(\code{ExpandNodeList} is used to expand and collect node lists as used by SLURM, in order to perform set operations on them. 
-The utility c\code{makedepf90} creates automatically Makefile dependency lists for Fortran source code; it is shipped together with EC-Earth, but the compiled version 
-is a platform-dependent.)
 
 The file \code{build-config.xml} in \code{sources} folder contains environmental variables and paths for the different platforms. 
 KNMI works with the \emph{neuron} platform. The paths should be set properly, in particular, \code{ECEARTH\_SRC\_DIR} and libraries -- 
@@ -46,11 +43,12 @@ For the development guide, see~\cite{dev-guide}.
 
 \section{Input data}
 %   Resolution description, its list and the description of each file, grid type
-IFS produces GRIB files as an output and NEMO outputs netCDF files via XiOS. 
-The output variables are defined through \code{pptdddddd0000} for IFS and \code{namelistXX.cfg.sh} (which is converted to XML file) for NEMO.
+\gls{IFS} produces \gls{GRIB} files as an output and \gls{NEMO} outputs \gls{netCDF} files via XiOS. 
+The output variables are defined through \code{pptdddddd0000} for IFS and \code{namelistXX.cfg.sh} (which is converted to XML file) for \gls{NEMO}.
+The output data is then \gls{CMOR}ized.
 
-Since NEMO and IFS are coupled through OASIS \cite{TM673}
-The \texttt{namcouple.sh} file contains the following information regarding IFS and NEMO:
+Since \gls{NEMO} and \gls{IFS} are coupled through OASIS \cite{TM673}
+The \texttt{namcouple.sh} file contains the following information regarding \gls{IFS} and \gls{NEMO}:
 
 \begin{lstlisting}
     159) atm_grid=A080
