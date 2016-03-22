@@ -1,0 +1,128 @@
+
+
+
+\appendix
+\chapter{Appendix}
+\section{Compilation}
+
+\begin{lstlisting}[caption={Compilation functions},label={app:comp},language=Bash]
+# =========== COMPILATIONS ==================
+# config for compilations
+cconf32()
+{
+    cd ${ece32b}sources
+    ec-conf -p neuron-intel-intelmpi config-build.xml
+    cd -
+}
+#oasis (add realclean to the make command)
+coas32()
+{
+    cd ${ece32b}sources/oasis3-mct/util/make_dir
+    make BUILD_ARCH=ecconf -f TopMakefileOasis3
+    cd -
+}
+# xios. "--full" means recompile from scratch.
+cxios32()
+{
+    cd ${ece32b}sources/xios-1.0
+    ./make_xios --arch ecconf --use_oasis oasis3_mct --netcdf_lib netcdf4_seq --full --job 8
+    cd -
+}
+# runoff-mapper (make clean)
+crunoff32()
+{
+    cd ${ece32b}sources/runoff-mapper/src
+    make
+    cd -
+}
+# ifs (make realclean)
+cifs32()
+{
+    cwd=$PWD 
+    cd ${ece32b}sources/ifs-36r4
+    make BUILD_ARCH=ecconf -j 10 lib
+    if [ $? == 0 ]; then make BUILD_ARCH=ecconf master; fi
+    cd $cwd
+}
+
+# nemo (./makenemo clean)
+# requires arg. Can be ORCA025L75_LIM3, ORCA025L75_LIM3_standalone, 
+                    ORCA1L75_LIM3, ORCA1L75_LIM3_standalone,
+cnemo32()
+{
+    cd ${ece32b}sources/nemo-3.6/CONFIG
+    ./makenemo -n $@ -m ecconf -j 8
+    cd -
+} 
+
+# tm5 (pass -n to cleanup before)
+ectm532()
+{
+    cd ${ece32b}sources/tm5mp
+    setup_tm5 $@ ecconfig-ecearth3.rc
+    cd -
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Run functions},label={app:run},language=Bash]
+# run IFS+NEMO
+function sub32 {
+    # run COUPLED
+    local hires=''
+    (( $# )) && [[ $1 = '-hr' ]] && hires=-hires
+    
+    cd ${ece32b}runtime/classic
+    ec-conf -p neuron config-run${hires}.xml
+    expn=$(get_ece_config_param.py config-run${hires}.xml GENERAL EXP_NAME)  ||  return 1
+    nifs=$(get_ece_config_param.py config-run${hires}.xml IFS NUMPROC)    ||  return 1
+    nnem=$(get_ece_config_param.py config-run${hires}.xml NEM NUMPROC)    ||  return 1
+    nxio=$(get_ece_config_param.py config-run${hires}.xml XIO NUMPROC)    ||  return 1
+    ppno=$(get_ece_config_param.py config-run${hires}.xml neuron PROC_PER_NODE) ||  return 1 
+    totp=$((nifs+nnem+nxio+1))
+    node=$(( totp/ppno ))
+    (( totp % ppno )) && (( node+=1 ))
+    echo "Submit: ifs${hires}(${nifs}) + nemo${hires}(${nnem}), exp=${expn} [-N${node} -n${totp} --ntasks-per-node=${ppno}]"
+    sbatch -N${node} -n${totp} --exclusive --account=ecearth --ntasks-per-node=${ppno} -o "out/${expn}${hires}.out.001" -e "out/${expn}${hires}.err.001" ./ece-ifs+nemo.sh
+    cd -
+}
+
+function sub32atm {
+    # run IFS alone
+    local hires=''
+    (( $# )) && [[ $1 = '-hr' ]] && hires=-hires
+
+    cd ${ece32b}runtime/classic
+    ec-conf -p neuron config-run${hires}.xml
+    expn=$(get_ece_config_param.py config-run${hires}.xml GENERAL EXP_NAME)  ||  return 1
+    nifs=$(get_ece_config_param.py config-run${hires}.xml IFS NUMPROC)    ||  return 1
+    ppno=$(get_ece_config_param.py config-run${hires}.xml neuron PROC_PER_NODE) ||  return 1
+    node=$(( nifs/ppno ))
+    (( nifs % ppno )) && (( node+=1 ))
+    echo "Submit: ifs${hires}(${nifs}), exp=${expn} [-N${node} -n${nifs} --ntasks-per-node=${ppno}]"
+    sbatch -N${node} -n${nifs} --exclusive --account=ecearth --ntasks-per-node=${ppno} -o "out/${expn}${hires}.out.001" -e "out/${expn}${hires}.err.001" ./ece-ifs.sh
+    cd -
+}
+
+function sub32oce {
+    # run NEMO alone
+    local hires=''
+    (( $# )) && [[ $1 = '-hr' ]] && hires=-hires
+
+    cd ${ece32b}runtime/classic
+    ec-conf -p neuron config-run${hires}.xml
+    expn=$(get_ece_config_param.py config-run${hires}.xml GENERAL EXP_NAME)  ||  return 1
+    nnem=$(get_ece_config_param.py config-run${hires}.xml NEM NUMPROC)    ||  return 1
+    nxio=$(get_ece_config_param.py config-run${hires}.xml XIO NUMPROC)    ||  return 1
+    ppno=$(get_ece_config_param.py config-run${hires}.xml neuron PROC_PER_NODE) ||  return 1
+    totp=$((nnem+nxio))
+    node=$(( totp/ppno ))
+    (( totp % ppno )) && (( node+=1 ))
+    echo "Submit: nemo${hires}(${nnem}), exp=${expn} [-N${node} -n${totp} --ntasks-per-node=${ppno}]"
+    sbatch -N${node} -n${totp} --exclusive --account=ecearth --ntasks-per-node=${ppno} -o "out/${expn}${hires}.out.001" -e "out/${expn}${hires}.err.001" ./ece-nemo.sh
+    cd -
+}
+
+\end{lstlisting}
+
+
+\printglossaries
