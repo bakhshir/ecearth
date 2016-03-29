@@ -78,6 +78,7 @@ The \texttt{namcouple.sh} file contains the following information regarding \gls
 
 
 
+
 % Ocean receives:
 % wind stress over ocean and ice, solar and non-solar fluxes, 
 % liquid and solid precipitation, total evaporation and evaporation over ice,
@@ -86,9 +87,6 @@ The \texttt{namcouple.sh} file contains the following information regarding \gls
 % Atmosphere receives: 
 % Sea surface temperature, ice temperature, ice albedo, ice fraction and thickness
 % Snow thickness on ice
-
-
-
 
 
 %CALV_OCE" "QS___OCE" "QS___ICE" "QNS__OCE" "QNS__ICE
@@ -124,6 +122,8 @@ NEMO to IFS & Sea surface temperature & Sea surface temperature\\
 \end{tabular}
 \caption{FIXME: Fields to be exchanged via OASIS coupling between IFS and NEMO with(out) LIM3} 
 \end{table}
+
+Input and output in NEMO is dictated by the \code{namelist} parameters.
 
 \section{Compilation}
 

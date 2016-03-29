@@ -124,5 +124,24 @@ function sub32oce {
 
 \end{lstlisting}
 
+% \section{Content of MY\_SRC directory}
+% 
+% (Future) Routines adapted for running ORCA025 (located in MY\_SRC directory)
+% \begin{itemize}
+%   \item closea.F90 : Caspian+Azov+Great Lakes+Lake Victoria
+%   \item dommsk.F90 : read a shlat2d.nc file (no strait hard coded).
+%   \item stpctl.F90 : test to detect NaN for velocities (to force NEMO to stop)
+%   \item trabbl.F90 : flag to use k-level instead of depth for bbl threshold (Drakkar)
+%   \item trazdf.F90 : fix on negative salinity removed (Drakkar)
+%   \item zdftke.F90 : decrease kz background under sea ice + no Langmuir under sea ice (Drakkar)
+% \end{itemize}
+% 
+% For now, a few new inputs in namelist\_cfg are required to run this ORCA025\_LIM3 configuration:
+% \begin{itemize}
+%   \item nambbl: ln\_kriteria (T/F).
+%   \item namzdf\_tke: rn\_ebbice, nn\_havti (0/1), ln\_nolcice (T/F).
+% \end{itemize}
+% 
+% 
 
 \printglossaries
