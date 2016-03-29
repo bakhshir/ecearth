@@ -103,10 +103,10 @@ EC-Earth (v3.2) consists of multiple components, some of which can be run standa
 \end{itemize}
 
 \subsection{IFS}
-
+ECMWF run the Integrated Forecast System (\glspl{IFS}). 
 \iffalse
 %src: http://computing.io/wp/2012/02/ecmwf-model-data/
-ECMWF run the Integrated Forecast System (\glspl{IFS}). This is a spectral model; in 2006 the deterministic operational model ran at a resolution of 
+This is a spectral model; in 2006 the deterministic operational model ran at a resolution of 
 a resolution of T799L91. A summary of this is:
 
 \begin{table}[h!]
@@ -140,6 +140,9 @@ a resolution of T799L91. A summary of this is:
 \end{table}  
 
 \fi
+
+The fluid equations for IFS is discretized using the spectral method. Spectral models generally use a gaussian grid, 
+because of the mathematics of transformation between spectral and grid-point space. Each grid point is a tuple $(u, v, T, Q)$. 
 
 The \gls{IFS} uses a linear reduced Gaussian grid (GG) for computation in grid point space. All prognostic variables are co-located at the grid points of the GG~\cite{ifs-meta}. %
 \gls{GRIB} data is archived in one of the following spatial coordinate systems~\cite{spatial-ecmwf}:   
@@ -204,6 +207,11 @@ communication. When running a whole-Earth configuration, the PEs along the north
 computation and communication is performed within this communicator to deal with the boundary conditions imposed by the poles~\cite{nemo-report}. In NEMO, the mesh poles are moved to land points~\cite{ref1}.
 
 LIM3~\cite{lim36,gmd-8-2991-2015}
+
+
+%For a standard finite difference model, uniform gridlines converge towards the poles. This would lead to computational instabilities (see CFL condition) 
+% and so the model variables must be filtered along lines of latitude close to the poles. Ocean models suffer from this problem too, unless a rotated grid 
+% is used in which the North Pole is shifted onto a nearby landmass. Spectral models do not suffer from this problem. 
 
 
 
